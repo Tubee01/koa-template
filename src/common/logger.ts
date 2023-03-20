@@ -1,4 +1,5 @@
 import winston from 'winston';
+import chalk from 'chalk';
 
 export class Logger {
   private readonly logger: winston.Logger;
@@ -15,44 +16,44 @@ export class Logger {
     if (process.env.NODE_ENV !== 'production') {
       this.logger.add(
         new winston.transports.Console({
-          format: winston.format.simple(),
+          format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
           level: 'debug',
         }),
       );
     }
   }
 
-  public info(message: string) {
-    this.logger.info(message);
+  public info(message: string, color = 'whiteBright') {
+    this.logger.info(chalk[color](message));
   }
 
-  public error(message: string) {
-    this.logger.error(message);
+  public error(message: string, color = 'red') {
+    this.logger.error(chalk[color](message));
   }
 
-  public warn(message: string) {
-    this.logger.warn(message);
+  public warn(message: string, color = 'yellow') {
+    this.logger.warn(chalk[color](message));
   }
 
-  public debug(message: string) {
-    this.logger.debug(message);
+  public debug(message: string, color = 'blue') {
+    this.logger.debug(chalk[color](message));
   }
 
-  public verbose(message: string) {
-    this.logger.verbose(message);
+  public verbose(message: string, color = 'cyan') {
+    this.logger.verbose(chalk[color](message));
   }
 
-  public silly(message: string) {
-    this.logger.silly(message);
+  public silly(message: string, color = 'magenta') {
+    this.logger.silly(chalk[color](message));
   }
 
-  public log(level: string, message: string) {
-    this.logger.log(level, message);
+  public log(level: string, message: string, color = 'whiteBright') {
+    this.logger.log(level, chalk[color](message));
   }
 
   public stream = {
     write: (message: string) => {
-      this.logger.info(message);
+      this.logger.info(chalk.whiteBright(message));
     },
   };
 }
