@@ -6,7 +6,7 @@ export class AppErrorHandle {
   public static handleError(err: any, ctx: Context) {
 
     if (err instanceof HttpError) {
-      ctx.status = 400
+      ctx.status = err.status;
       ctx.body = {
         status: -1,
         message: err.message || 'Bad Request',

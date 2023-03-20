@@ -29,12 +29,12 @@ export class Router<T extends ClassConstructor> {
       const controllerInstance = new controller(this.app);
       const { routes } = controllerInstance;
 
-      logger.verbose(`[${this.constructor.name}]: ${controllerInstance.constructor.name} loaded`);
+      logger.info(`[${this.constructor.name}]: ${controllerInstance.constructor.name} loaded`);
 
       routes.forEach(route => {
         const { method, path, handler: { name } } = route;
 
-        logger.verbose(`[${this.constructor.name}]: ${method} ${path}`);
+        logger.info(`[${this.constructor.name}]: ${method} ${path}`);
 
         switch (method) {
           case HttpMethod.GET:
