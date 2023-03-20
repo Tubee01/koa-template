@@ -4,10 +4,12 @@
   "description": "",
   "main": "src/main.ts",
   "scripts": {
+    "prebuild": "rimraf dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "ts-node-dev -r tsconfig-paths/register --watch *.yml .",
-    "build": "tsc .",
-    "start": "node build/main.js",
+    "build": "npm run prebuild && tsc -p tsconfig.build.json",
+    "postbuild": "ef-tspm",
+    "start": "node dist/main.js",
     "prepare": "husky install",
     "lint": "eslint --ext .ts src/",
     "lint:fix": "eslint --ext .ts src/ --fix",
@@ -27,6 +29,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@ef-carbon/tspm": "^2.2.5",
     "@types/koa": "^2.13.5",
     "@types/koa-bodyparser": "^4.3.10",
     "@types/koa-json": "^2.0.20",
@@ -42,6 +45,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "prettier": "^2.8.5",
+    "rimraf": "^4.4.0",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.1.2",
     "typescript": "^5.0.2"

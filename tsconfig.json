@@ -9,7 +9,6 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src", 
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -31,8 +30,8 @@
       ],
       "@decorators/*": [
         "./src/common/decorators/*"
-      ],
-    }, 
+      ]
+    }
   },
   "ts-node": {
     "require": [
