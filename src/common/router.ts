@@ -5,6 +5,15 @@ import { HttpMethod } from './decorators';
 interface ClassConstructor {
   new (app: Application): any;
 }
+
+type Route = {
+  method: HttpMethod;
+  path: string;
+  handler: {
+    name: string;
+    [key: string]: any;
+  };
+};
 export class Router<T extends ClassConstructor> {
   private readonly router: KoaRouter = new KoaRouter();
 
@@ -32,7 +41,7 @@ export class Router<T extends ClassConstructor> {
 
       logger.info(`[${this.constructor.name}]: ${controllerInstance.constructor.name} loaded`);
 
-      routes.forEach((route) => {
+      routes.forEach((route: Route) => {
         const {
           method,
           path,
