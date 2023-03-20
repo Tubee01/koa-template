@@ -26,3 +26,7 @@ export const Delete = (path: string = '') => {
   return Endpoint(HttpMethod.DELETE, path);
 }
 
+export const Patch = (path: string = '') => {
+  return Endpoint(HttpMethod.PATCH, path);
+}
+
