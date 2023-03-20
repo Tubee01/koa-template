@@ -1,26 +1,28 @@
-import { Context, HttpError } from "koa";
-import { Logger } from "./logger";
+import { Context, HttpError, Next } from 'koa';
 
-export class AppErrorHandle {
-  private static logger = new Logger();
-  public static handleError(err: any, ctx: Context) {
+export function errorHandler(): (ctx: Context, next: Next) => Promise<void> {
+  return async (ctx: Context, next: Next): Promise<void> => {
+    const { logger } = ctx;
 
-    if (err instanceof HttpError) {
-      ctx.status = err.status;
-      ctx.body = {
-        status: -1,
-        message: err.message || 'Bad Request',
-      };
+    try {
+      await next();
+    } catch (err) {
+      if (err instanceof HttpError) {
+        ctx.status = err.status;
+        ctx.body = {
+          status: -1,
+          message: err.message || 'Bad Request',
+        };
+      } else {
+        ctx.status = 500;
+        ctx.body = {
+          status: -1,
+          message: 'Internal Server Error',
+        };
+      }
 
-    } else {
-      ctx.status = 500;
-      ctx.body = {
-        status: -1,
-        message: err.message || 'Internal Server Error',
-      };
+      logger.error(JSON.stringify(err));
+      ctx.app.emit('error', err, ctx);
     }
-
-    this.logger.error(JSON.stringify(err));
-    ctx.app.emit('error', err, ctx);
-  }
+  };
 }

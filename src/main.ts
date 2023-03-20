@@ -1,4 +1,4 @@
-import { AppErrorHandle } from '@common/error-handler';
+import { errorHandler } from '@common/error-handler';
 import { Logger } from '@common/logger';
 import { Router } from '@common/router';
 import { config } from 'dotenv';
@@ -48,14 +48,7 @@ const bootstrap = async () => {
   app.use(koaBody());
   app.use(koaLogger());
   app.use(json());
-
-  app.use(async (ctx, next) => {
-    try {
-      await next();
-    } catch (err) {
-      AppErrorHandle.handleError(err, ctx);
-    }
-  });
+  app.use(errorHandler());
 
   /*
   * Routes
