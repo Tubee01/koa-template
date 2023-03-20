@@ -25,13 +25,13 @@ const bootstrap = async () => {
   const app = new Koa();
 
   /*
-  * Logger
-  */
+   * Logger
+   */
   app.context.logger = logger;
 
   /*
-  * Swagger
-  */
+   * Swagger
+   */
   const spec = yamljs.load('./openapi.yml');
   app.use(
     koaSwagger({
@@ -43,8 +43,8 @@ const bootstrap = async () => {
   );
 
   /*
-  * Middleware
-  */
+   * Middleware
+   */
   app.use(koaBody());
   app.use(koaLogger());
   app.use(json());
@@ -52,6 +52,7 @@ const bootstrap = async () => {
 
   /*
   * Routes
+  
   */
   const routes = [AppController];
   new Router(app, routes).init();
@@ -61,6 +62,6 @@ const bootstrap = async () => {
     logger.info(`URL: http://localhost:${APP_PORT}`);
     logger.info(`Swagger UI available at http://localhost:${APP_PORT}/swagger`);
   });
-}
+};
 
 bootstrap();
