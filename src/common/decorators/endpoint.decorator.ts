@@ -1,14 +1,17 @@
-export const Endpoint = (method: string, path: string = '') => {
-  return (target: any, key: string, descriptor: PropertyDescriptor) => {
-    if (!target.routes) {
-      target.routes = [];
-    }
-    const regex = /(^\/|\/$)/g;
+import { normalizePath } from "./utils";
 
-    target.routes.push({
-      method: method.toUpperCase(),
-      path: `/${path.replace(regex, '')}` || '/',
-      handler: descriptor.value,
-    });
-  };
-}
+export const Endpoint = (method: string, path: string = '') => (
+  target: any,
+  key: string,
+  descriptor: PropertyDescriptor,
+) => {
+  target.routes = target.routes || [];
+
+  const normalizedPath = normalizePath(path);
+
+  target.routes.push({
+    method: method.toUpperCase(),
+    path: normalizedPath ? `/${normalizedPath}` : '/',
+    handler: descriptor.value,
+  });
+};

@@ -1,13 +1,9 @@
-export const Controller = (path: string = '') => {
-  return (target: any) => {
-    const regex = /(^\/|\/$)/g;
+import { normalizePath } from "./utils";
 
-    target.prototype.routes?.forEach((route: any) => {
-      if (route.path.replace(regex, '') === '') {
-        route.path = `/${path.replace(regex, '')}`;
-        return;
-      }
-      route.path = `${path.replace(regex, '')}/${route.path.replace(regex, '')}` || '/';
-    });
-  };
-} 
+export const Controller = (path: string = '') => (target: any) => {
+  target.prototype.routes?.forEach((route: any) => {
+    const normalizedPath = normalizePath(path);
+    const normalizedRoutePath = normalizePath(route.path);
+    route.path = normalizedRoutePath ? `${normalizedPath}/${normalizedRoutePath}` : `/${normalizedPath}`;
+  });
+};

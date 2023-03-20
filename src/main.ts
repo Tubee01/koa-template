@@ -1,13 +1,16 @@
 import { AppErrorHandle } from '@common/error-handler';
 import { Logger } from '@common/logger';
-import { RouterModule } from '@common/router.module';
+import { Router } from '@common/router';
+import { config } from 'dotenv';
 import Koa from 'koa';
 import koaBody from 'koa-body';
 import json from 'koa-json';
-import KoaLogger from 'koa-logger';
+import koaLogger from 'koa-logger';
 import { koaSwagger } from 'koa2-swagger-ui';
 import yamljs from 'yamljs';
 import { AppController } from './routes/app.controller';
+
+config();
 
 declare module 'koa' {
   interface BaseContext {
@@ -43,7 +46,7 @@ const bootstrap = async () => {
   * Middleware
   */
   app.use(koaBody());
-  app.use(KoaLogger());
+  app.use(koaLogger());
   app.use(json());
 
   app.use(async (ctx, next) => {
@@ -58,7 +61,7 @@ const bootstrap = async () => {
   * Routes
   */
   const routes = [AppController];
-  new RouterModule(app, routes).init();
+  new Router(app, routes).init();
 
   app.listen(APP_PORT).on('listening', () => {
     logger.info(`Server listening on port ${APP_PORT}`);

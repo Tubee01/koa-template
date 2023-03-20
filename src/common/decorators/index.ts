@@ -2,19 +2,27 @@ import { Endpoint } from './endpoint.decorator';
 
 export * from './controller.decorator';
 
+export enum HttpMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+  PATCH = 'PATCH',
+}
+
 export const Get = (path: string = '') => {
-  return Endpoint('get', path);
+  return Endpoint(HttpMethod.GET, path);
 };
 
 export const Post = (path: string = '') => {
-  return Endpoint('post', path);
+  return Endpoint(HttpMethod.POST, path);
 }
 
 export const Put = (path: string = '') => {
-  return Endpoint('put', path);
+  return Endpoint(HttpMethod.PUT, path);
 }
 
 export const Delete = (path: string = '') => {
-  return Endpoint('delete', path);
+  return Endpoint(HttpMethod.DELETE, path);
 }
 
