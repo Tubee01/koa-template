@@ -1,15 +1,16 @@
-import Application, { Context, Next } from "koa";
-import KoaRouter from "@koa/router";
-import { HttpMethod } from "./decorators";
+import Application, { Context, Next } from 'koa';
+import KoaRouter from '@koa/router';
+import { HttpMethod } from './decorators';
 
 interface ClassConstructor {
-  new(app: Application): any;
+  new (app: Application): any;
 }
 export class Router<T extends ClassConstructor> {
   private readonly router: KoaRouter = new KoaRouter();
-  private readonly controllers: Array<T>;
 
-  constructor(private readonly app: Application, controllers: Array<T>) {
+  private readonly controllers: T[];
+
+  constructor(private readonly app: Application, controllers: T[]) {
     this.controllers = controllers;
   }
 
@@ -25,14 +26,18 @@ export class Router<T extends ClassConstructor> {
       };
     }
 
-    this.controllers.forEach(controller => {
+    this.controllers.forEach((controller) => {
       const controllerInstance = new controller(this.app);
       const { routes } = controllerInstance;
 
       logger.info(`[${this.constructor.name}]: ${controllerInstance.constructor.name} loaded`);
 
-      routes.forEach(route => {
-        const { method, path, handler: { name } } = route;
+      routes.forEach((route) => {
+        const {
+          method,
+          path,
+          handler: { name },
+        } = route;
 
         logger.info(`[${this.constructor.name}]: ${method} ${path}`);
 
@@ -55,7 +60,7 @@ export class Router<T extends ClassConstructor> {
           default:
             throw new Error(`Method ${method} not supported`);
         }
-      })
+      });
     });
 
     this.app.use(this.router.routes());

@@ -10,23 +10,22 @@ export enum HttpMethod {
   PATCH = 'PATCH',
 }
 
-export const Get = (path: string = '') => {
+export const Get = (path = '') => {
   return Endpoint(HttpMethod.GET, path);
 };
 
-export const Post = (path: string = '') => {
+export const Post = (path = '') => {
   return Endpoint(HttpMethod.POST, path);
-}
+};
 
-export const Put = (path: string = '') => {
+export const Put = (path = '') => {
   return Endpoint(HttpMethod.PUT, path);
-}
+};
 
-export const Delete = (path: string = '') => {
+export const Delete = (path = '') => {
   return Endpoint(HttpMethod.DELETE, path);
-}
+};
 
-export const Patch = (path: string = '') => {
+export const Patch = (path = '') => {
   return Endpoint(HttpMethod.PATCH, path);
-}
-
+};

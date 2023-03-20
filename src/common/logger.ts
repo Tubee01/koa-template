@@ -1,7 +1,8 @@
-import winston from "winston";
+import winston from 'winston';
 
 export class Logger {
   private readonly logger: winston.Logger;
+
   constructor() {
     this.logger = winston.createLogger({
       level: 'debug',
@@ -12,12 +13,12 @@ export class Logger {
       ],
     });
     if (process.env.NODE_ENV !== 'production') {
-      this.logger
-        .add(new winston.transports.Console({
+      this.logger.add(
+        new winston.transports.Console({
           format: winston.format.simple(),
-          level: 'debug'
-        }));
-
+          level: 'debug',
+        }),
+      );
     }
   }
 
@@ -52,6 +53,6 @@ export class Logger {
   public stream = {
     write: (message: string) => {
       this.logger.info(message);
-    }
-  }
+    },
+  };
 }
