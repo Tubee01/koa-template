@@ -11,7 +11,7 @@ export const Endpoint =
 
     target.routes.push({
       method,
-      path: normalizedPath ? `/${normalizedPath}` : '/',
+      path: normalizedPath ? `${normalizedPath}` : '/',
       handler: descriptor.value,
     }) satisfies Route;
   };
