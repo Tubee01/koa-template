@@ -50,25 +50,7 @@ export class Router<T extends ClassConstructor> {
 
         logger.info(`[${this.constructor.name}]: ${method} ${path}`);
 
-        switch (method) {
-          case HttpMethod.GET:
-            this.router.get(path, controllerCallback(controllerInstance, name));
-            break;
-          case HttpMethod.POST:
-            this.router.post(path, controllerCallback(controllerInstance, name));
-            break;
-          case HttpMethod.PUT:
-            this.router.put(path, controllerCallback(controllerInstance, name));
-            break;
-          case HttpMethod.DELETE:
-            this.router.delete(path, controllerCallback(controllerInstance, name));
-            break;
-          case HttpMethod.PATCH:
-            this.router.patch(path, controllerCallback(controllerInstance, name));
-            break;
-          default:
-            throw new Error(`Method ${method} not supported`);
-        }
+        this.router[method.toLowerCase()](path, controllerCallback(controllerInstance, name));
       });
     });
 
