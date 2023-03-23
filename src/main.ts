@@ -8,7 +8,7 @@ import json from 'koa-json';
 import koaLogger from 'koa-logger';
 import { koaSwagger } from 'koa2-swagger-ui';
 import yamljs from 'yamljs';
-import { AppController } from './routes/app.controller';
+import { AppController } from './modules/app.controller';
 
 config();
 
@@ -51,9 +51,8 @@ const bootstrap = async () => {
   app.use(errorHandler());
 
   /*
-  * Routes
-  
-  */
+   * Routes
+   */
   const routes = [AppController];
   new Router(app, routes).init();
 
