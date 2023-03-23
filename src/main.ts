@@ -58,9 +58,9 @@ const bootstrap = async () => {
   new Router(app, routes).init();
 
   app.listen(APP_PORT).on('listening', () => {
-    logger.info(`Server listening on port ${APP_PORT}`);
-    logger.info(`URL: http://localhost:${APP_PORT}`);
-    logger.info(`Swagger UI available at http://localhost:${APP_PORT}/swagger`);
+    logger.info(`Server listening on port ${APP_PORT}`, bootstrap.name);
+    logger.info(`URL: http://localhost:${APP_PORT}`, bootstrap.name);
+    logger.info(`Swagger UI available at http://localhost:${APP_PORT}/swagger`, bootstrap.name);
   });
 };
 

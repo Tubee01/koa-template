@@ -1,3 +1,4 @@
+import { Logger } from '@common/logger';
 import Application from 'koa';
 
 type StarWarsCharacterQuote = {
@@ -59,15 +60,19 @@ const charactersAndQuotes: StarWarsCharacter[] = [
 ];
 
 export class AppService {
-  constructor(private readonly app: Application) {}
+  private readonly logger: Logger;
+
+  constructor(private readonly app: Application) {
+    this.logger = app.context.logger;
+  }
 
   public findAll() {
-    this.app.context.logger.verbose(`[${this.constructor.name}]: findAll`);
+    this.logger.verbose(`findAll`, this.constructor.name);
     return this.delayData(charactersAndQuotes, this.randomIntForDelay());
   }
 
   public findRandom() {
-    this.app.context.logger.verbose(`[${this.constructor.name}]: findRandom`);
+    this.logger.verbose(`findRandom`, this.constructor.name);
     return this.delayData(
       charactersAndQuotes[Math.floor(Math.random() * charactersAndQuotes.length)],
       this.randomIntForDelay(),
@@ -75,7 +80,7 @@ export class AppService {
   }
 
   private delayData<T>(data: T, delay: number): Promise<T> {
-    this.app.context.logger.verbose(`[${this.constructor.name}]: delayData`);
+    this.logger.verbose(`delaying data by ${delay}ms`, this.constructor.name);
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(data);

@@ -39,8 +39,6 @@ export class Router<T> {
         return;
       }
 
-      logger.info(`[${this.constructor.name}]: ${controllerInstance.constructor.name} loaded`);
-
       routes.forEach((route: Route) => {
         const {
           method,
@@ -48,7 +46,7 @@ export class Router<T> {
           handler: { name },
         } = route;
 
-        logger.info(`[${this.constructor.name}]: ${method} ${path}`);
+        logger.info(`mapped ${method} ${path}`, this.constructor.name);
 
         this.router[method.toLowerCase()](path, controllerCallback(controllerInstance, name));
       });
