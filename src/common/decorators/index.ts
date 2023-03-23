@@ -2,30 +2,24 @@ import { Endpoint } from './endpoint.decorator';
 
 export * from './controller.decorator';
 
-export enum HttpMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-  PATCH = 'PATCH',
-}
+import { HttpMethodEnum } from 'koa-body';
 
 export const Get = (path = '') => {
-  return Endpoint(HttpMethod.GET, path);
+  return Endpoint(HttpMethodEnum.GET, path);
 };
 
 export const Post = (path = '') => {
-  return Endpoint(HttpMethod.POST, path);
+  return Endpoint(HttpMethodEnum.POST, path);
 };
 
 export const Put = (path = '') => {
-  return Endpoint(HttpMethod.PUT, path);
+  return Endpoint(HttpMethodEnum.PUT, path);
 };
 
 export const Delete = (path = '') => {
-  return Endpoint(HttpMethod.DELETE, path);
+  return Endpoint(HttpMethodEnum.DELETE, path);
 };
 
 export const Patch = (path = '') => {
-  return Endpoint(HttpMethod.PATCH, path);
+  return Endpoint(HttpMethodEnum.PATCH, path);
 };

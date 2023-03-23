@@ -1,19 +1,20 @@
 import Application, { Context, Next } from 'koa';
 import KoaRouter from '@koa/router';
-import { HttpMethod } from './decorators';
+import { HttpMethodEnum } from 'koa-body';
 
 interface ClassConstructor<T> {
   new (app: Application): { routes: Route[] } & T;
 }
 
-type Route = {
-  method: HttpMethod;
+export type Route = {
+  method: HttpMethodEnum;
   path: string;
   handler: {
     name: string;
     [key: string]: any;
   };
 };
+
 export class Router<T> {
   private readonly router: KoaRouter = new KoaRouter();
 
@@ -26,13 +27,8 @@ export class Router<T> {
   public init() {
     const { logger } = this.app.context;
 
-    function controllerCallback(controllerInstance: any, handler: string) {
-      return async (ctx: Context, next: Next) => {
-        const result = await controllerInstance[handler](ctx, next);
-        if (result !== undefined) {
-          ctx.body = result;
-        }
-      };
+    function controllerCallback<C>(controllerInstance: C, handler: string) {
+      return async (ctx: Context, next: Next) => await controllerInstance[handler](ctx, next);
     }
 
     this.controllers.forEach((controller) => {
