@@ -68,27 +68,11 @@ export class AppService {
 
   public findAll() {
     this.logger.verbose(`findAll`, this.constructor.name);
-    return this.delayData(charactersAndQuotes, this.randomIntForDelay());
+    return charactersAndQuotes;
   }
 
   public findRandom() {
     this.logger.verbose(`findRandom`, this.constructor.name);
-    return this.delayData(
-      charactersAndQuotes[Math.floor(Math.random() * charactersAndQuotes.length)],
-      this.randomIntForDelay(),
-    );
-  }
-
-  private delayData<T>(data: T, delay: number): Promise<T> {
-    this.logger.verbose(`delaying data by ${delay}ms`, this.constructor.name);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(data);
-      }, delay);
-    });
-  }
-
-  private randomIntForDelay(min = 0, max = 1000) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return charactersAndQuotes[Math.floor(Math.random() * charactersAndQuotes.length)];
   }
 }
