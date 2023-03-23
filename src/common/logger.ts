@@ -1,59 +1,61 @@
-import winston from 'winston';
-import chalk from 'chalk';
+import winston, { LoggerOptions } from 'winston';
+import { FileTransportOptions } from 'winston/lib/winston/transports';
+
+interface LoggerConfig {
+  level: LoggerOptions['level'];
+  logFiles: FileTransportOptions[];
+}
+
+const DEFAULT_CONFIG: LoggerConfig = {
+  level: 'info',
+  logFiles: [{ filename: './logs/error.log', level: 'error' }, { filename: './logs/combined.log' }],
+};
 
 export class Logger {
-  private readonly logger: winston.Logger;
+  constructor(config: LoggerConfig = DEFAULT_CONFIG) {
+    const { level, logFiles } = config;
 
-  constructor() {
-    this.logger = winston.createLogger({
-      level: 'debug',
-      format: winston.format.json(),
-      transports: [
-        new winston.transports.File({ filename: './logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: './logs/combined.log' }),
-      ],
+    const transports = logFiles.map((fileConfig) => {
+      return new winston.transports.File(fileConfig);
     });
+
+    const logger = winston.createLogger({
+      level,
+      format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
+      transports,
+    });
+
     if (process.env.NODE_ENV !== 'production') {
-      this.logger.add(
+      logger.add(
         new winston.transports.Console({
           format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
-          level: 'debug',
+          level,
         }),
       );
     }
+
+    const loggerLevels = Object.keys(logger.levels);
+
+    const objElements = loggerLevels.map((level) => {
+      return {
+        [level]: logger[level].bind(logger),
+      };
+    });
+
+    Object.assign(this, ...objElements);
   }
 
-  public info(message: string, color = 'whiteBright') {
-    this.logger.info(chalk[color](message));
-  }
+  error: winston.LeveledLogMethod;
 
-  public error(message: string, color = 'red') {
-    this.logger.error(chalk[color](message));
-  }
+  warn: winston.LeveledLogMethod;
 
-  public warn(message: string, color = 'yellow') {
-    this.logger.warn(chalk[color](message));
-  }
+  info: winston.LeveledLogMethod;
 
-  public debug(message: string, color = 'blue') {
-    this.logger.debug(chalk[color](message));
-  }
+  http: winston.LeveledLogMethod;
 
-  public verbose(message: string, color = 'cyan') {
-    this.logger.verbose(chalk[color](message));
-  }
+  verbose: winston.LeveledLogMethod;
 
-  public silly(message: string, color = 'magenta') {
-    this.logger.silly(chalk[color](message));
-  }
+  debug: winston.LeveledLogMethod;
 
-  public log(level: string, message: string, color = 'whiteBright') {
-    this.logger.log(level, chalk[color](message));
-  }
-
-  public stream = {
-    write: (message: string) => {
-      this.logger.info(chalk.whiteBright(message));
-    },
-  };
+  silly: winston.LeveledLogMethod;
 }
