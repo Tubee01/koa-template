@@ -2,8 +2,8 @@ import Application, { Context, Next } from 'koa';
 import KoaRouter from '@koa/router';
 import { HttpMethod } from './decorators';
 
-interface ClassConstructor {
-  new (app: Application): any;
+interface ClassConstructor<T> {
+  new (app: Application): { routes: Route[] } & T;
 }
 
 type Route = {
@@ -14,13 +14,13 @@ type Route = {
     [key: string]: any;
   };
 };
-export class Router<T extends ClassConstructor> {
+export class Router<T> {
   private readonly router: KoaRouter = new KoaRouter();
 
-  private readonly controllers: T[];
+  private readonly controllers: ClassConstructor<T>[] = [];
 
   constructor(private readonly app: Application, controllers: T[]) {
-    this.controllers = controllers;
+    this.controllers = controllers as ClassConstructor<T>[];
   }
 
   public init() {
@@ -38,6 +38,10 @@ export class Router<T extends ClassConstructor> {
     this.controllers.forEach((controller) => {
       const controllerInstance = new controller(this.app);
       const { routes } = controllerInstance;
+
+      if (!routes || !routes.length) {
+        return;
+      }
 
       logger.info(`[${this.constructor.name}]: ${controllerInstance.constructor.name} loaded`);
 
