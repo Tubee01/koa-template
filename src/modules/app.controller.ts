@@ -1,14 +1,10 @@
 import { Controller, Get } from '@common/decorators';
-import Application, { Context } from 'koa';
+import { Context } from 'koa';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  private readonly appService: AppService;
-
-  constructor(private readonly app: Application) {
-    this.appService = new AppService(this.app);
-  }
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   async findAll(ctx: Context) {

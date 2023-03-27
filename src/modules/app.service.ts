@@ -1,5 +1,5 @@
+import { Injectable } from '@common/decorators/injectable.decorator';
 import { Logger } from '@common/logger';
-import Application from 'koa';
 
 type StarWarsCharacterQuote = {
   quote: string;
@@ -59,20 +59,16 @@ const charactersAndQuotes: StarWarsCharacter[] = [
   },
 ];
 
+@Injectable()
 export class AppService {
-  private readonly logger: Logger;
-
-  constructor(private readonly app: Application) {
-    this.logger = app.context.logger;
-  }
+  constructor(private readonly logger: Logger) {}
 
   public findAll() {
-    this.logger.verbose(`findAll`, this.constructor.name);
+    this.logger.info(`${charactersAndQuotes.length} characters found`, this.constructor.name);
     return charactersAndQuotes;
   }
 
   public findRandom() {
-    this.logger.verbose(`findRandom`, this.constructor.name);
     return charactersAndQuotes[Math.floor(Math.random() * charactersAndQuotes.length)];
   }
 }

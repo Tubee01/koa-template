@@ -1,5 +1,7 @@
 import { Route } from '@common/router';
-import { normalizePath } from './utils';
+import { normalizePath, registerDependencies } from './utils';
+import { container } from '@common/container';
+import { asClass } from 'awilix';
 
 export const Controller =
   (path = '') =>
@@ -14,5 +16,11 @@ export const Controller =
       }
 
       route.path = `/${normalizedPath}/${normalizedRoutePath}`;
+    });
+
+    registerDependencies(target);
+
+    container.register({
+      [target.name]: asClass(target),
     });
   };

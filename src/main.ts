@@ -1,6 +1,8 @@
+import { container } from '@common/container';
 import { errorHandler } from '@common/error-handler';
 import { Logger } from '@common/logger';
 import { Router } from '@common/router';
+import { asClass, asValue } from 'awilix';
 import { config } from 'dotenv';
 import Koa from 'koa';
 import koaBody from 'koa-body';
@@ -54,7 +56,12 @@ const bootstrap = async () => {
    * Routes
    */
   const routes = [AppController];
-  new Router(app, routes).init();
+  new Router(app, routes);
+
+  container.register({
+    context: asValue(app.context),
+    logger: asClass(Logger).singleton(),
+  });
 
   app.listen(APP_PORT).on('listening', () => {
     logger.info(`Server listening on port ${APP_PORT}`, bootstrap.name);

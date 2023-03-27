@@ -30,6 +30,7 @@ export class Logger {
       return `${timestamp} [${callerName}] [${level}]: ${message}`;
     });
 
+    
     const transports = logFiles.map((fileConfig) => {
       return new DailyRotateFile(fileConfig);
     });
